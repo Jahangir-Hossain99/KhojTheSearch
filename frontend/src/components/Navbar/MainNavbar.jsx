@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect,useState,useContext } from 'react'
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import NavbarBrand from './NavbarBrand'
 import NavbarLinks from './NavbarLinks'
 import NavbarButtons from './NavbarButtons'
@@ -8,7 +8,7 @@ import NavbarToggle from './NavbarToggle'
 
 const MainNavbar = () => {
     const [isOpen, setIsOpen] = useState(false)
-    const {isLoggedIn} = useContext(AuthContext);
+    const {isLoggedIn} = useAuth();
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {

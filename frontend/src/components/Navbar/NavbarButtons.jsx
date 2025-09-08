@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef,useContext } from "react";
-import { NavLink } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import React, { useEffect, useState, useRef } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const NavbarButtons = () => {
-  const { isLoggedIn, login, logout } = useContext(AuthContext);
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -32,7 +34,6 @@ const NavbarButtons = () => {
           <NavLink
             to="/login"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700"
-            onClick={login}
           >
             Login
           </NavLink>
@@ -79,7 +80,7 @@ const NavbarButtons = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => {logout(); setDropdownOpen(false);}}
+                    onClick={() => {   setDropdownOpen(false); setShowLogoutModal(true);}}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Logout
@@ -90,6 +91,37 @@ const NavbarButtons = () => {
           )}
         </div>
       )}
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+      <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">
+        Confirm Logout
+      </h2>
+      <p className="mb-6 text-gray-600 dark:text-gray-300">
+        Are you sure you want to logout?
+      </p>
+      <div className="flex justify-end space-x-4">
+        <button
+          className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+          onClick={() => setShowLogoutModal(false)} // Cancel
+        >
+          Cancel
+        </button>
+        <button
+          className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+          onClick={() => {
+            logout(navigate); // Confirm logout
+            setShowLogoutModal(false);
+          }}
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
