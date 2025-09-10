@@ -1,0 +1,27 @@
+src/
+│
+├── components/
+│   ├── navbar/
+│   │   ├── MainNavbar.jsx
+│   │   ├── NavbarBrand.jsx
+│   │   ├── NavbarButtons.jsx
+│   │   └── NavbarLinks.jsx
+│   │   └── NavbarToggle.jsx
+│   │
+│   └── jobs/
+│       ├── JobCard.jsx
+│       └── JobFilter.jsx
+│
+├── pages/
+│   ├── Dashboard.jsx
+│   ├── Jobs.jsx
+│   ├── JobDetails.jsx
+│   ├── Profile.jsx
+│   ├── About.jsx
+│   ├── Contact.jsx
+│   └── NotFound.jsx
+│
+├── context/
+│   └── AuthContext.jsx
+│
+└── App.jsx
