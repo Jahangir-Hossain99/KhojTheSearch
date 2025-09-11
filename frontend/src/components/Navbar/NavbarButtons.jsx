@@ -114,6 +114,7 @@ const NavbarButtons = () => {
           onClick={() => {
             logout(navigate); // Confirm logout
             setShowLogoutModal(false);
+            navigate('/login')
           }}
         >
           Logout

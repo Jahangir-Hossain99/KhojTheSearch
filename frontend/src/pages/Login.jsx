@@ -16,9 +16,13 @@ const Login = () => {
     e.preventDefault();
     
     if(email === "user@example.com" && password === "123456") {
-      login();
-      toast.success("Login successful!");
+      login("user");
+      toast.success("User Login successful!");
       navigate(from, { replace: true }); // redirect to original page
+    }else if(email ==="admin@example.com" && password ==="123456"){
+      login("admin");
+      toast.success("User Login successful!");
+      navigate("/admin-panel")
     }else{
       toast.error("Invalid credentials. Please try again.");
     }
