@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children, allowedRoles }) => {
-  const { isLoggedIn, loading,userRole } = useAuth();
+  const { isLoggedIn, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -15,7 +15,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   }
 
     // Logged in but role doesn't match → redirect to not authorized
-  if (allowedRoles && userRole !== allowedRoles) {
+  if (allowedRoles && allowedRoles === 'user') {
     return <Navigate to="/unauthorized"  replace />;
   }
 

@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route,useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import MainNavbar from "./components/Navbar/MainNavbar";
 import Home from "./pages/Home";
@@ -16,19 +16,24 @@ import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
 import Unauthorized from "./pages/Unauthorized";
 import Loader from "./components/Loader"
+import Searchbar from "./components/Searchbar/Searchbar";
 
 
 function App() {
 
-  const {loading} = useAuth();
+  const {loading,userRole} = useAuth();
+  const location = useLocation();
 
   if(loading){
     return <Loader />
   }
 
+  const showSearchBar = location.pathname === '/' || location.pathname ==='/jobs';
+
   return (
     <>
       <MainNavbar />
+      {showSearchBar && <Searchbar />}
       <Toaster position="center-center" />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -48,7 +53,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={
-          <PrivateRoute allowedRoles={['user','admin']} >
+          <PrivateRoute allowedRoles={userRole} >
             <Dashboard />
           </PrivateRoute>
         } />

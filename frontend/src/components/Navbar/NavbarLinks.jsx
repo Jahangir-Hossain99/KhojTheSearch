@@ -2,8 +2,9 @@ import { NavLink, redirect } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"; // Adjust path
 
 const Links = [
-  { name: "Dashboard", url: "/dashboard", auth: true },
+  { name: "Dashboard", url: "/dashboard", auth: true , role:"admin"},
   { name: "Home", url: "/" },
+  { name: "Profile", url: "/profile", auth:true },
   { name: "About", url: "/about" },
   { name: "Contact", url: "/contact" },
    { name: "Admin Panel", url: "/admin-panel", auth: true, role: "admin" },

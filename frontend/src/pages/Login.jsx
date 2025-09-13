@@ -18,7 +18,7 @@ const Login = () => {
     if(email === "user@example.com" && password === "123456") {
       login("user");
       toast.success("User Login successful!");
-      navigate(from, { replace: true }); // redirect to original page
+      navigate("/");
     }else if(email ==="admin@example.com" && password ==="123456"){
       login("admin");
       toast.success("User Login successful!");
