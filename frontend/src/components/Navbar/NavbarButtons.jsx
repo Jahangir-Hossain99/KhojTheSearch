@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const NavbarButtons = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout,userRole } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -64,20 +64,32 @@ const NavbarButtons = () => {
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>
                   <NavLink
-                    to=""
+                    to="/profile"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Profile
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    to="/dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Dashboard
-                  </NavLink>
-                </li>
+                {userRole === 'admin' && (
+                  <>
+                  <li>
+                    <NavLink
+                      to="/dashboard"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/admin-panel"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Admin Panel
+                    </NavLink>
+                  </li>
+                  </>
+                )}
                 <li>
                   <button
                     onClick={() => {   setDropdownOpen(false); setShowLogoutModal(true);}}
