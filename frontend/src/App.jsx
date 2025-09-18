@@ -8,7 +8,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
-import Jobs from "./pages/Jobs";
 import JobDetails from './pages/JobDetails';
 import Profile from './pages/Profile';
 import { Toaster } from "react-hot-toast";
@@ -39,7 +38,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={
           <PrivateRoute allowedRoles={['user','admin']}>
             <JobDetails />
