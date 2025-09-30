@@ -13,9 +13,9 @@ import Profile from './pages/Profile';
 import { Toaster } from "react-hot-toast";
 import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
-import Unauthorized from "./pages/Unauthorized";
 import Loader from "./components/Loader"
 import Searchbar from "./components/Searchbar/Searchbar";
+import JobPosting from "./pages/JobPosting";
 
 
 function App() {
@@ -38,11 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/jobs/:id" element={
-          <PrivateRoute allowedRoles={['user','admin']}>
-            <JobDetails />
-          </PrivateRoute>
-        } />
+        <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/profile" element={
           <PrivateRoute allowedRoles={['user','admin']} >
             <Profile />
@@ -51,7 +47,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={
-          <PrivateRoute allowedRoles={userRole} >
+          <PrivateRoute allowedRoles={['admin','employee']} >
             <Dashboard />
           </PrivateRoute>
         } />
@@ -60,7 +56,11 @@ function App() {
             <AdminPanel />
           </PrivateRoute>
         } />
-        <Route path="/unauthorized" element={<Unauthorized/>}/>
+        <Route path="/post_a_job" element={
+          <PrivateRoute allowedRoles={['admin','employee']} >
+            <JobPosting />
+          </PrivateRoute>
+        } />
         <Route path="*" element={<NotFound/>} />
       </Routes>
       

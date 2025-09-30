@@ -1,6 +1,17 @@
 import React from 'react';
+// 1. Import the hook needed for navigation
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  // 2. Initialize the navigate function
+  const navigate = useNavigate();
+
+  // Function to handle the redirect to the job details page
+  const handleViewDetails = (jobId) => {
+    // Navigates to the path defined in your main router: /jobs/:id
+    navigate(`/jobs/${jobId}`);
+  };
+
   // Sample data for job listings
   const jobs = [
     {
@@ -99,7 +110,12 @@ const Home = () => {
               </div>
             </div>
             
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
+            {/* 3. Modified Button with onClick handler */}
+            <button 
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200"
+              // Pass the current job's unique ID to the handler
+              onClick={() => handleViewDetails(job.id)}
+            >
               View Details
             </button>
           </div>
