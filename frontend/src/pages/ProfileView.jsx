@@ -66,18 +66,16 @@ const ProfileView = ({ profile, onEdit }) => {
                 <h3 className="text-xl font-semibold text-gray-900">Lead Software Engineer</h3>
                 <p className="text-cyan-700 text-base mb-2">Tech Innovators Inc. | 2020 - Present</p>
                 <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <li>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.</li>
-                  <li>Increased application performance by 30% through comprehensive code optimization and refactoring.</li>
-                  <li>Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</li>
+                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
+                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
                 </ul>
               </div>
               <div className="border-l-4 border-purple-500 pl-4 py-1">
                 <h3 className="text-xl font-semibold text-gray-900">Software Engineer</h3>
                 <p className="text-cyan-700 text-base mb-2">Web Solutions Co. | 2017 - 2020</p>
                 <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <li>Developed and maintained features for several high-traffic client websites using React, Node.js, and GraphQL.</li>
-                  <li>Collaborated closely with designers and product managers to deliver a seamless and engaging user experience.</li>
-                  <li>Mentored junior developers, facilitating their growth and contribution to team projects.</li>
+                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
+                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
                 </ul>
               </div>
             </div>
@@ -89,16 +87,16 @@ const ProfileView = ({ profile, onEdit }) => {
                 <h3 className="text-xl font-semibold text-gray-900">Master of Science in Computer Science</h3>
                 <p className="text-cyan-700 text-base mb-2">University of Technology | 2015 - 2017</p>
                 <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <li>Specialized in Distributed Systems and Machine Learning.</li>
-                  <li>Thesis: "Scalable Real-time Data Processing using Apache Kafka."</li>
+                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
+                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
                 </ul>
               </div>
               <div className="border-l-4 border-purple-500 pl-4 py-1">
                 <h3 className="text-xl font-semibold text-gray-900">Bachelor of Engineering in Software Engineering</h3>
                 <p className="text-cyan-700 text-base mb-2">State University | 2011 - 2015</p>
                 <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <li>Graduated with Honors.</li>
-                  <li>Relevant Coursework: Data Structures, Algorithms, Web Development.</li>
+                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
+                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
                 </ul>
               </div>
             </div>
