@@ -1,10 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import EditableList from '../components/EditableList'; 
+import InputField from '../components/UI/InputField';
 // Assuming EditableList handles the complex array fields
 
 const EditForm = ({ profileData, onSave, onCancel }) => {
     // Local state to manage form inputs, initialized with the current profile data
     const [formData, setFormData] = useState(profileData);
+
+    const [skillInput, setSkillInput] = useState(
+        Array.isArray(profileData.skills) ? profileData.skills.join(', ') : ''
+    );
 
     // Generic handler for input changes (used by simple fields)
     const handleChange = (e) => {
@@ -15,10 +20,21 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         }));
     };
 
-    // Handler for the Save button
     const handleSave = () => {
-        // Pass the updated data back to the parent component
-        onSave(formData);
+        // 1. Convert the raw skillInput string to the final array format
+        const finalSkillsArray = skillInput
+            .split(',')        // Split by comma
+            .map(s => s.trim()) // Remove extra spaces
+            .filter(s => s);    // Remove any empty strings
+
+        // 2. Create the final data object, overwriting the old skills array
+        const finalFormData = {
+            ...formData,
+            skills: finalSkillsArray, 
+        };
+
+        // 3. Pass the fully updated data back to the parent component
+        onSave(finalFormData);
     };
 
     // Handler for the Cancel button
@@ -26,23 +42,6 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         // Parent component handles switching back to view mode
         onCancel();
     };
-
-     const handleSkillsChange = useCallback((e) => {
-        const newSkillString = e.target.value;
-        const newSkillsArray = newSkillString
-            .split(',')        
-            .map(s => s.trim()) 
-            .filter(s => s);    
-
-        // NOTE: handleArrayUpdate is a stable function reference if defined outside 
-        //       EditForm or memoized itself. Assuming it's defined inside EditForm,
-        //       we must include 'handleArrayUpdate' in the dependency array if it changes.
-        //       Since handleArrayUpdate uses 'setFormData', we'll rely on React's 
-        //       guarantee that setState functions are stable.
-        
-        // We only depend on the state setter 'handleArrayUpdate' (which relies on 'setFormData')
-        handleArrayUpdate('skills', newSkillsArray);
-    }, [handleArrayUpdate]);
 
     // Handler for updating the entire array (used by EditableList and Skills)
     const handleArrayUpdate = (fieldName, updatedArray) => {
@@ -67,8 +66,13 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         handleArrayUpdate(fieldName, [...formData[fieldName], newItem]);
     };
 
+    const handleSkillsChange = useCallback((e) => {
+        // Only update the local string state. Allows commas and spaces to be typed.
+        setSkillInput(e.target.value);
+    }, []); 
+
     // --- TEMPLATES FOR NEW ARRAY ITEMS ---
-    const newExperienceTemplate = { title: '', company: '', years: '', description: '' };
+    const newExperienceTemplate = { title: '', company: '', years: '' };
     const newEducationTemplate = { degree: '', institution: '', years: '' };
 
     // --- FIELD DEFINITIONS FOR EDITABLE LISTS ---
@@ -76,7 +80,6 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         { name: 'title', label: 'Job Title' },
         { name: 'company', label: 'Company' },
         { name: 'years', label: 'Duration' },
-        { name: 'description', label: 'Description', type: 'textarea' }
     ];
 
     const educationFields = [
@@ -84,34 +87,6 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         { name: 'institution', label: 'Institution' },
         { name: 'years', label: 'Years' }
     ];
-
-    // --- Input Field Helper Component for clean UI ---
-    // FIX: Must accept and use the 'onChange' prop to allow custom handlers.
-    const InputField = ({ label, name, value, type = "text", isTextArea = false, onChange }) => (
-        <div className="mb-4">
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
-            {isTextArea ? (
-                <textarea
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={onChange} // CORRECT: Uses the prop
-                    rows="4"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2 border"
-                />
-            ) : (
-                <input
-                    type={type}
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={onChange} // CORRECT: Uses the prop
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2 border"
-                />
-            )}
-        </div>
-    );
-    // --------------------------------------------------
 
     return (
         <div className="bg-white shadow-xl rounded-lg p-6 sm:p-8 max-w-6xl mx-auto">
@@ -136,10 +111,8 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
             <div className="flex flex-col md:flex-row items-center md:items-start mb-8">
                 {/* ... Avatar Code (omitted for brevity) ... */}
                 <div className="text-center md:text-left mt-2 w-full">
-                    {/* FIX: Must pass onChange={handleChange} for all simple fields */}
                     <InputField label="Full Name" name="name" value={formData.name} onChange={handleChange} />
                     <InputField label="Title" name="title" value={formData.title} onChange={handleChange} />
-                    <InputField label="Open To" name="openTo" value={formData.openTo} isTextArea={true} onChange={handleChange} />
                 </div>
             </div>
 
@@ -189,9 +162,7 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
                         <InputField
                             label="Skills"
                             name="skills"
-                            // Defensive check for rendering array:
-                            value={Array.isArray(formData.skills) ? formData.skills.join(', ') : ''}
-                            // Custom onChange for conversion:
+                            value={skillInput}
                             onChange={handleSkillsChange}
                             isTextArea={true}
                         />

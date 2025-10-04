@@ -21,7 +21,7 @@ const ProfileView = ({ profile, onEdit }) => {
           {/* Displaying state data */}
           <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">{profile.name}</h1>
           <p className="text-xl sm:text-2xl text-cyan-700 font-semibold mt-1">{profile.title}</p>
-          <p className="text-lg text-gray-600 mt-2">{profile.openTo}</p>
+          
         </div>
       </div>
 
@@ -65,18 +65,10 @@ const ProfileView = ({ profile, onEdit }) => {
               <div className="mb-6 border-l-4 border-purple-500 pl-4 py-1"> {/* Added timeline-like border */}
                 <h3 className="text-xl font-semibold text-gray-900">Lead Software Engineer</h3>
                 <p className="text-cyan-700 text-base mb-2">Tech Innovators Inc. | 2020 - Present</p>
-                <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
-                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
-                </ul>
               </div>
               <div className="border-l-4 border-purple-500 pl-4 py-1">
                 <h3 className="text-xl font-semibold text-gray-900">Software Engineer</h3>
                 <p className="text-cyan-700 text-base mb-2">Web Solutions Co. | 2017 - 2020</p>
-                <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
-                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
-                </ul>
               </div>
             </div>
 
@@ -86,18 +78,10 @@ const ProfileView = ({ profile, onEdit }) => {
               <div className="mb-6 border-l-4 border-purple-500 pl-4 py-1">
                 <h3 className="text-xl font-semibold text-gray-900">Master of Science in Computer Science</h3>
                 <p className="text-cyan-700 text-base mb-2">University of Technology | 2015 - 2017</p>
-                <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
-                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
-                </ul>
               </div>
               <div className="border-l-4 border-purple-500 pl-4 py-1">
                 <h3 className="text-xl font-semibold text-gray-900">Bachelor of Engineering in Software Engineering</h3>
                 <p className="text-cyan-700 text-base mb-2">State University | 2011 - 2015</p>
-                <ul className="list-disc list-inside text-gray-700 text-base space-y-1">
-                  <p>Led a team of 5 engineers in the development of a new e-commerce platform from conception to launch.
-                  Implemented robust CI/CD pipelines to automate deployment processes, reducing release time by 50%.</p>
-                </ul>
               </div>
             </div>
         </div>
