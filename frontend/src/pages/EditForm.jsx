@@ -113,6 +113,10 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
                 <div className="text-center md:text-left mt-2 w-full">
                     <InputField label="Full Name" name="name" value={formData.name} onChange={handleChange} />
                     <InputField label="Title" name="title" value={formData.title} onChange={handleChange} />
+                    <div className='columns-2' >
+                    <InputField label="Email" name="email" value={formData.email} type="email" onChange={handleChange} />
+                    <InputField label="Password" name="password" type="password" value={formData.password} onChange={handleChange} />
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +131,6 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
 
                     <div className="text-base text-gray-700 space-y-3">
                         {/* FIX: Must pass onChange={handleChange} for all simple fields */}
-                        <InputField label="Email" name="email" value={formData.email} type="email" onChange={handleChange} />
                         <InputField label="Phone" name="phone" value={formData.phone} onChange={handleChange} />
                         <InputField label="Address" name="address" value={formData.address} onChange={handleChange} />
                         <InputField label="LinkedIn URL (e.g., linkedin.com/in/janedoe)" name="linkedin" value={formData.linkedin} onChange={handleChange} />

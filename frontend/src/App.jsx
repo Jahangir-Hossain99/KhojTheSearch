@@ -16,6 +16,7 @@ import AdminPanel from "./pages/AdminPanel";
 import Loader from "./components/Loader"
 import Searchbar from "./components/Searchbar/Searchbar";
 import JobPosting from "./pages/JobPosting";
+import EmployerRegisterForm from "./pages/EmployerRegisterForm";
 
 
 function App() {
@@ -47,10 +48,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={
-          <PrivateRoute allowedRoles={['admin','employee']} >
+          <PrivateRoute allowedRoles={['admin','employeer']} >
             <Dashboard />
           </PrivateRoute>
         } />
+        
+        <Route path="/employeer" element={<EmployerRegisterForm />} />
+
         <Route path="/admin-panel" element={
           <PrivateRoute allowedRoles={['admin']} >
             <AdminPanel />

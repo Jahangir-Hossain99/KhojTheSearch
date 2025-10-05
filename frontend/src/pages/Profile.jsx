@@ -6,7 +6,7 @@ import EditForm from './EditForm';     // Assuming you saved the form component 
 const initialProfileData = {
   name: 'Jane Doe',
   title: 'Senior Software Engineer',
-  openTo: 'Open to new opportunities in the tech industry.',
+  password: '123456',
   about: 'A passionate and results-driven senior software engineer...',
   email: 'jane.doe@email.com',
   phone: '(123) 456-7890',
