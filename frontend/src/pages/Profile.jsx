@@ -5,7 +5,6 @@ import EditForm from './EditForm';     // Assuming you saved the form component 
 // Mock data structure
 const initialProfileData = {
   name: 'Jane Doe',
-  title: 'Senior Software Engineer',
   password: '123456',
   about: 'A passionate and results-driven senior software engineer...',
   email: 'jane.doe@email.com',

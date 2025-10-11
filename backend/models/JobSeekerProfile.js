@@ -1,49 +1,44 @@
-// models/JobSeekerProfile.js
 const mongoose = require('mongoose');
 
-// --- Sub-Schemas for Arrays ---
 const ExperienceSchema = new mongoose.Schema({
-    id: { type: Number },
-    title: { type: String, required: true },
-    company: { type: String, required: true },
-    years: { type: String }, 
-    description: { type: String }
-});
+  title: { type: String, required: true, trim: true },
+  company: { type: String, required: true, trim: true },
+  years: { type: String, trim: true },
+  description: { type: String, trim: true },
+}, { _id: true });
 
 const EducationSchema = new mongoose.Schema({
-    id: { type: Number },
-    degree: { type: String, required: true },
-    institution: { type: String, required: true },
-    years: { type: String }
-});
+  degree: { type: String, required: true, trim: true },
+  institution: { type: String, required: true, trim: true },
+  years: { type: String, trim: true },
+}, { _id: true });
 
-
-// --- Main Job Seeker Profile Schema ---
 const JobSeekerProfileSchema = new mongoose.Schema({
-    // Link back to the main User
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        unique: true
-    },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true, index: true },
+  fullName: { type: String, required: true, trim: true },
+  title: { type: String, trim: true },
+  about: { type: String, trim: true },
+  phone: { type: String, trim: true },
+  address: { type: String, trim: true },
+  linkedin: { type: String, trim: true },
+  avatarUrl: { type: String, trim: true },
+  resumeUrl: { type: String, trim: true },
+  skills: {
+    type: [String], default: [],
+    set: (arr) => Array.isArray(arr)
+      ? [...new Set(arr.map(s => typeof s === 'string' ? s.trim() : s))].filter(Boolean)
+      : [],
+  },
+  experience: { type: [ExperienceSchema], default: [] },
+  education: { type: [EducationSchema], default: [] },
+  visibility: { type: String, enum: ['public','private','recruiters_only'], default: 'public', index: true },
+}, { timestamps: true });
 
-    // 1. Identity & Core Profile Fields (Moved from User.js)
-    fullName: { type: String, required: true, trim: true }, // The person's name
-    title: { type: String }, // Job headline
-    about: { type: String },
-    
-    // 2. Contact Fields
-    phone: { type: String },
-    address: { type: String },
-    linkedin: { type: String },
+JobSeekerProfileSchema.index({ user: 1 });
+JobSeekerProfileSchema.index({ skills: 1 });
+JobSeekerProfileSchema.index({ fullName: 'text', title: 'text', about: 'text' });
 
-    // 3. Array Fields (The Resume Data)
-    skills: [String],
-    experience: [ExperienceSchema],
-    education: [EducationSchema]
-}, {
-    timestamps: true
-});
+JobSeekerProfileSchema.set('toJSON', { transform: (doc, ret) => { delete ret.__v; return ret; } });
+JobSeekerProfileSchema.set('toObject', { transform: (doc, ret) => { delete ret.__v; return ret; } });
 
-module.exports = mongoose.model('JobSeekerProfile', JobSeekerProfileSchema);
+module.exports = mongoose.models.JobSeekerProfile || mongoose.model('JobSeekerProfile', JobSeekerProfileSchema);

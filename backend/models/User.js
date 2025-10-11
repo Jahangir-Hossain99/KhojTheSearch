@@ -1,55 +1,49 @@
-// models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // Needed for password hashing
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
-    // Authentication Fields
-    email: { // Used for both personal and official company email
-        type: String,
-        required: [true, 'Email is required'],
-        unique: true,
-        trim: true,
-        lowercase: true,
-        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email address'] 
-    },
-    password: {
-        type: String,
-        required: [true, 'Password is required'],
-        minlength: [6, 'Password must be at least 6 characters long'],
-        select: false // Ensures password is NOT returned in query results by default
-    },
+  email: { type: String, required: true, unique: true, trim: true, lowercase: true,
+    match: [/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/i, 'Please enter a valid email address'] },
+  password: { type: String, required: true, minlength: 6, select: false },
+  role: { type: String, enum: ['jobseeker'], default: 'jobseeker', index: true },
+  profileModel: { type: String, enum: ['JobSeekerProfile'] },
+  profile: { type: mongoose.Schema.Types.ObjectId, refPath: 'profileModel' },
+  status: { type: String, enum: ['active','suspended','unverified'], default: 'unverified', index: true },
+  emailVerifiedAt: Date,
+  lastLoginAt: Date,
+  phone: String,
+}, { timestamps: true });
 
-    // Role Differentiation (Crucial)
-    role: {
-        type: String,
-        enum: ['jobseeker', 'employer'],
-        default: 'jobseeker',
-        required: [true, 'User role is required']
-    },
+UserSchema.index({ email: 1 }, { unique: true });
 
-    // Link to Profile (Dynamically references JobSeekerProfile or EmployerProfile)
-    profile: {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'role', 
-        required: false
-    }
-}, {
-    timestamps: true 
-});
-
-// Middleware for password hashing before saving
 UserSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
-// Method to compare entered password with hash
-UserSchema.methods.matchPassword = async function(enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+UserSchema.pre('findOneAndUpdate', async function(next) {
+  const update = this.getUpdate() || {};
+  const newPassword = update.password || (update.$set && update.$set.password);
+  if (!newPassword) return next();
+  const salt = await bcrypt.genSalt(10);
+  const hashed = await bcrypt.hash(newPassword, salt);
+  if (update.password) update.password = hashed;
+  if (update.$set && update.$set.password) update.$set.password = hashed;
+  this.setUpdate(update);
+  next();
+});
+
+UserSchema.methods.matchPassword = function(pwd) { return bcrypt.compare(pwd, this.password); };
+UserSchema.methods.generateJWT = function() {
+  return jwt.sign({ sub: this._id.toString(), type: 'user', role: this.role }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+  });
 };
 
-module.exports = mongoose.model('User', UserSchema);
+UserSchema.set('toJSON', { transform: (doc, ret) => { delete ret.password; delete ret.__v; return ret; } });
+UserSchema.set('toObject', { transform: (doc, ret) => { delete ret.password; delete ret.__v; return ret; } });
+
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema);
