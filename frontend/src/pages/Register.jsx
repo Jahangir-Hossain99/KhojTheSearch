@@ -3,27 +3,6 @@ import InputField from '../components/UI/InputField';
 import EditableList from '../components/EditableList';
 import { useNavigate } from 'react-router-dom';
 
-// Initial empty data structure for registration
-
-const initialRegistrationData = {
-  // Simple Fields
-  name: '',
-  password: '',
-  about: '',
-  email: '',
-  phone: '',
-  address: '',
-  linkedin: '',
-
-  // Array Fields
-  experience: [], // Starts empty
-  education: [], // Starts empty
-  skills: [],    // Starts empty
-
-  // Helper State for Skills Input
-  skillInput: '', // To manage the comma-separated string for skills
-};
-
 
 const MAX_AVATAR_MB = 2;   // e.g., 2 MB
 const MAX_RESUME_MB = 10;  // e.g., 10 MB
@@ -38,7 +17,32 @@ const bytesToMB = (bytes) => (bytes / (1024 * 1024)).toFixed(2);
 
 // Main application component
 
-const Register = ({ onSubmit, onCancel, initialRegistrationData = {} }) => {
+const Register = ({ onSubmit, onCancel = {} }) => {
+
+  // Initial empty data structure for registration
+
+const initialRegistrationData = {
+  // Simple Fields
+  name: '',
+  password: '',
+  about: '',
+  email: '',
+  phone: '',
+  address: '',
+  linkedin: '',
+  role:'jobseeker',
+
+  avatarUrl: '',
+  resumeUrl: '',
+
+  // Array Fields
+  experience: [], // Starts empty
+  education: [], // Starts empty
+  skills: [],    // Starts empty
+
+  // Helper State for Skills Input
+  skillInput: '', // To manage the comma-separated string for skills
+};
 
   // Initialize with the empty data structure
   const [formData, setFormData] = useState(initialRegistrationData);

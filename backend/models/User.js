@@ -7,13 +7,26 @@ const UserSchema = new mongoose.Schema({
     match: [/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/i, 'Please enter a valid email address'] },
   password: { type: String, required: true, minlength: 6, select: false },
   role: { type: String, enum: ['jobseeker'], default: 'jobseeker', index: true },
-  profileModel: { type: String, enum: ['JobSeekerProfile'] },
-  profile: { type: mongoose.Schema.Types.ObjectId, refPath: 'profileModel' },
+  fullName: { type: String, required: true, trim: true },
   status: { type: String, enum: ['active','suspended','unverified'], default: 'unverified', index: true },
-  emailVerifiedAt: Date,
-  lastLoginAt: Date,
   phone: String,
-}, { timestamps: true });
+  address: String,
+  aboutme: String,
+  linkedin: String,
+  workexperience: [{
+    jobTitle: {type: String, required: true},
+    company: { type: String, required: true },
+    company: String,
+  }],
+  educations: [{
+    degree: {type: String, required: true},
+    institution: { type: String, required: true },
+    years: String
+  }],
+  skills: [String],
+  avatar: {URL: String, fileName: String},
+  resume: {URL: String, fileName: String},
+});
 
 UserSchema.index({ email: 1 }, { unique: true });
 

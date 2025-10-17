@@ -431,6 +431,7 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
         {/* Right column: Experience / Education / Skills */}
         <div className="md:col-span-2 space-y-8">
           {/* 1. Editable Work Experience */}
+          {console.log(formData.experience)}
           <EditableList
             title="Work Experiences"
             items={formData.experience}
@@ -441,6 +442,7 @@ const EditForm = ({ profileData, onSave, onCancel }) => {
           />
 
           {/* 2. Editable Education */}
+          {console.log(formData.experience)}
           <EditableList
             title="Educations"
             items={formData.education}
