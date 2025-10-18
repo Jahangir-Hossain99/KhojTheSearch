@@ -1,7 +1,8 @@
-import React, { useState,useCallback } from 'react';
+import React, { useState,useCallback,useEffect } from 'react';
 import InputField from '../components/UI/InputField';
 import EditableList from '../components/EditableList';
 import { useNavigate } from 'react-router-dom';
+import {registerUser} from '../api/postsAPI';
 
 
 const MAX_AVATAR_MB = 2;   // e.g., 2 MB
@@ -18,6 +19,7 @@ const bytesToMB = (bytes) => (bytes / (1024 * 1024)).toFixed(2);
 // Main application component
 
 const Register = ({ onSubmit, onCancel = {} }) => {
+
 
   // Initial empty data structure for registration
 
@@ -44,8 +46,17 @@ const initialRegistrationData = {
   skillInput: '', // To manage the comma-separated string for skills
 };
 
+ 
+
   // Initialize with the empty data structure
-  const [formData, setFormData] = useState(initialRegistrationData);
+  const [formData, setFormData] = useState();
+   useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await registerUser();
+      setFormData(data?data:initialRegistrationData);
+    };
+    fetchPosts();
+  }, []);
 
   // Initialize the skillInput helper state
   const [skillInput, setSkillInput] = useState('');
@@ -240,6 +251,7 @@ const initialRegistrationData = {
       </div>
 
       {/* Profile Header Fields */}
+      <form>
       <div className="flex flex-col md:flex-row items-center md:items-start mb-8">
         <div className="text-center md:text-left mt-2 w-full">
           {/* Prefer fullName for backend, keep name for UI backward compatibility */}
@@ -390,6 +402,7 @@ const initialRegistrationData = {
           </div>
         </div>
       </div>
+      </form>
     </div>
   );
 };
