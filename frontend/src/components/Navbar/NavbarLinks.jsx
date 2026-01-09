@@ -1,18 +1,19 @@
-import { NavLink, redirect } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"; // Adjust path
 
 const Links = [
-  { name: "Dashboard", url: "/dashboard", auth: true , role:"admin"},
-  { name: "Home", url: "/" },
-  { name: "Profile", url: "/profile", auth:true },
+  { name: "Dashboard", url: "/dashboard", auth: true , role:["admin","employer"]},
+  { name: "Home", url: "/", auth: false },
+  { name: "Profile", url: "/profile", auth:true, role:["jobseeker","admin"] },
+  { name: "Profile", url: "/company-profile", auth:true, role:["employer","admin"] },
   { name: "About", url: "/about" },
   { name: "Contact", url: "/contact" },
-   { name: "Admin Panel", url: "/admin-panel", auth: true, role: "admin" },
+   { name: "Admin Panel", url: "/admin-panel", auth: true, role: ["admin"] },
 ];
 
 const NavbarLinks = ({ setIsOpen }) => {
-  const { isLoggedIn,userRole } = useAuth();
-
+  const { isLoggedIn,userData } = useAuth();
+  
   const linkClass =
     "block py-2 px-3 rounded-md hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 transition dark:text-gray-300 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent";
 
@@ -25,11 +26,16 @@ const NavbarLinks = ({ setIsOpen }) => {
       {Links.map((link) => {
         // Skip link if auth is required and user is not logged in
         if (link.auth && !isLoggedIn) return null ;
+        
         // Hide link if it's role-restricted and user doesn't match the role
-        if (link.role && userRole !== link.role) return null;
+        if (link.role){
+          if(!isLoggedIn || !link.role.includes(userData?.role)){
+            return null
+          }
+        }
 
         return (
-          <li key={link.name}>
+          <li key={link.url}>
             <NavLink
               to={link.url}
               onClick={handleLinkClick}

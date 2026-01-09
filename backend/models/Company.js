@@ -8,15 +8,12 @@ const CompanySchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 6, select: false },
   name: { type: String, required: true, trim: true, index: true },
   website: { type: String, trim: true },
-  logoUrl: { type: String, trim: true },
-  industry: { type: String, trim: true },
-  size: { type: String, enum: ['1-10','11-50','51-200','201-500','501-1000','1001+'] },
+  logoUrl: {URL: String, fileName: String},
+  role:{ type: String, default: 'employer' },
   about: { type: String, trim: true },
   address: { type: String, trim: true },
-  verified: { type: Boolean, default: false },
 }, { timestamps: true });
 
-CompanySchema.index({ email: 1 }, { unique: true });
 
 CompanySchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();

@@ -13,22 +13,20 @@ const UserSchema = new mongoose.Schema({
   address: String,
   aboutme: String,
   linkedin: String,
-  workexperience: [{
-    jobTitle: {type: String, required: true},
-    company: { type: String, required: true },
-    company: String,
+  experience: [{
+    title: {type: String},
+    company: { type: String },
+    years: String,
   }],
-  educations: [{
-    degree: {type: String, required: true},
-    institution: { type: String, required: true },
+  education: [{
+    degree: {type: String,},
+    institution: { type: String,  },
     years: String
   }],
   skills: [String],
-  avatar: {URL: String, fileName: String},
-  resume: {URL: String, fileName: String},
+  avatarUrl: {URL: String, fileName: String},
+  resumeUrl: {URL: String, fileName: String},
 });
-
-UserSchema.index({ email: 1 }, { unique: true });
 
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();

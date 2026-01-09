@@ -1,11 +1,13 @@
 import React from 'react';
 
-const ProfileView = ({ profile, onEdit }) => {
+// Assuming you'll pass an onDelete function from the parent component
+const ProfileView = ({ profile, onEdit, onDelete }) => {
   // Helpers
   const displayName = profile?.fullName || profile?.name || 'Anonymous';
+  const BACKEND_BASE_URL = 'http://localhost:5000';
   const safeUrl = (url) => {
     if (!url) return null;
-    return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+    return(`${BACKEND_BASE_URL}${url.URL}`)
   };
   const getInitials = (name = '') => {
     const parts = name.trim().split(/\s+/);
@@ -15,85 +17,85 @@ const ProfileView = ({ profile, onEdit }) => {
   };
 
   const linkedinHref = safeUrl(profile?.linkedin);
-  const resumeHref = safeUrl(profile?.resumeUrl);
-  const avatarSrc = safeUrl(profile?.avatarUrl);
+  const resumeHref = safeUrl(profile?.userData?.resumeUrl);
+  const avatarSrc =  safeUrl(profile?.userData?.avatarUrl);
 
   return (
-    <div className="bg-white shadow-xl rounded-lg p-6 sm:p-8 max-w-6xl mx-auto">
+    <div className="bg-zinc-50 shadow-xl rounded-lg p-6 sm:p-8 max-w-6xl mx-auto">
+      {/* Profile Header: Avatar, Name, Title, Edit/Delete Buttons */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6"> 
+        {/* --- 1. Avatar & Info Block (Left Side) --- */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 flex-grow">
+          {/* Avatar */}
+          <div className="flex-shrink-0">
+            {avatarSrc ? (
+              <img
+                src={avatarSrc}
+                alt={`${displayName}'s avatar`}
+                className="w-26 h-26 md:w-30 md:h-30 rounded-full object-cover border"
+              />
+            ) : (
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-900 border flex items-center justify-center">
+                <span className="text-2xl md:text-3xl font-bold text-white">
+                  {getInitials(displayName)}
+                </span>
+              </div>
+            )}
+          </div>
 
-      {/* Edit button */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={onEdit}
-          className="flex items-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors"
-        >
-          {/* You can add an edit SVG icon here */}
-          Edit Profile
-        </button>
-      </div>
-
-      {/* Profile Header */}
-      <div className="flex flex-col md:flex-row items-center md:items-start mb-8 gap-4">
-        {/* Avatar */}
-        <div className="flex-shrink-0">
-          {avatarSrc ? (
-            <img
-              src={avatarSrc}
-              alt={`${displayName}'s avatar`}
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border"
-            />
-          ) : (
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-purple-100 border flex items-center justify-center">
-              <span className="text-2xl md:text-3xl font-bold text-purple-700">
-                {getInitials(displayName)}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="text-center md:text-left mt-2">
           {/* Name & Title */}
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
-            {displayName}
-          </h1>
-          <p className="text-xl sm:text-2xl text-cyan-700 font-semibold mt-1">
-            {profile?.title}
-          </p>
-
-          {/* Resume actions (View / Download) */}
-          {resumeHref && (
-            <div className="mt-4 flex flex-wrap gap-3">
-              <a
-                href={resumeHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
-              >
-                View Resume
-              </a>
-              <a
-                href={resumeHref}
-                download
-                className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors"
-              >
-                Download Resume
-              </a>
-            </div>
-          )}
+          <div className="text-center md:text-left mt-2">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+              {displayName}
+            </h1>
+            <p className="text-xl sm:text-2xl text-gray-700 font-semibold mt-1">
+              {profile?.title}
+            </p>
+          </div>
         </div>
+
+        {/* --- 2. Edit & Delete Buttons (Right Side) --- */}
+        {/* self-start ensures buttons are aligned to the top of the entire header block */}
+        <div className="flex flex-row md:flex-col gap-3 md:gap-2 self-center md:self-start">
+          
+          <button
+            onClick={onEdit}
+            className="flex items-center px-4 py-2 bg-gray-900 text-white font-semibold rounded-md hover:bg-gray-700 transition-colors whitespace-nowrap shadow-md"
+          >
+            Edit Profile
+          </button>
+
+          <button
+            onClick={onDelete}
+            className="flex items-center px-4 py-2 bg-red-700 text-white font-semibold rounded-md border-none hover:bg-red-600 transition-colors whitespace-nowrap shadow-md"
+          >
+            Delete Profile
+          </button>
+        </div>
+
       </div>
+      {/* End Profile Header */}
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* About & Contact Section */}
         <div className="md:col-span-1 bg-white rounded-lg p-6 border border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-purple-300">
+          <h2 className="text-2xl font-bold text-gray-700 mb-4 pb-2 border-b-2 border-gray-700">
             About &amp; Contact
           </h2>
-          <p className="text-gray-700 mb-5 leading-relaxed">
-            {profile?.about}
+          <div className="mb-6 bg-gray-50 p-4 rounded-md border border-gray-200">
+            <p className="text-md font-semibold text-gray-800 mb-2">
+            About Me:<br></br> 
+            <span className="font-normal">
+              <span className="text-gray-700 mb-5 leading-relaxed">
+                {profile?.about}
+              </span>
+            </span>
           </p>
+          </div>
 
-          <div className="text-base text-gray-700 space-y-3">
+          <div className="text-base text-gray-800 space-y-3">
+            {/* ... (Contact details remain the same) ... */}
             <p className="flex items-center">Email: {profile?.email}</p>
             <p className="flex items-center">Phone: {profile?.phone}</p>
             <p className="flex items-center">Address: {profile?.address}</p>
@@ -106,7 +108,7 @@ const ProfileView = ({ profile, onEdit }) => {
                   href={linkedinHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline ml-1"
+                  className="text-blue-600 wrap-anywhere hover:underline ml-1"
                 >
                   {profile.linkedin}
                 </a>
@@ -118,17 +120,17 @@ const ProfileView = ({ profile, onEdit }) => {
           {resumeHref && (
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href={resumeHref}
+                href={`${resumeHref}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-2 bg-blue-50 text-blue-700 font-medium rounded-md hover:bg-blue-100 transition-colors"
+                className="px-3 py-2 bg-blue-50 text-gray-700 font-medium rounded-md hover:bg-blue-100 transition-colors"
               >
                 View Resume
               </a>
               <a
                 href={resumeHref}
                 download
-                className="px-3 py-2 bg-indigo-50 text-indigo-700 font-medium rounded-md hover:bg-indigo-100 transition-colors"
+                className="px-3 py-2 bg-blue-50 text-gray-700 font-medium rounded-md hover:bg-blue-100 transition-colors"
               >
                 Download
               </a>
@@ -140,7 +142,7 @@ const ProfileView = ({ profile, onEdit }) => {
         <div className="md:col-span-2 space-y-8">
           {/* Skills Section */}
           <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-purple-300">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-700">
               Skills
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -148,7 +150,7 @@ const ProfileView = ({ profile, onEdit }) => {
                 profile.skills.map((skill, idx) => (
                   <span
                     key={`${skill}-${idx}`}
-                    className="bg-purple-100 text-gray-800 text-sm font-medium px-4 py-1.5 rounded-full shadow-sm hover:bg-purple-200 transition-colors"
+                    className="bg-gray-200 text-gray-800 text-sm font-medium px-4 py-1.5 rounded-full shadow-sm hover:bg-purple-200 transition-colors"
                   >
                     {skill}
                   </span>
@@ -161,7 +163,7 @@ const ProfileView = ({ profile, onEdit }) => {
 
           {/* Work Experience Section */}
           <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-purple-300">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-700">
               Work Experience
             </h2>
 
@@ -169,10 +171,10 @@ const ProfileView = ({ profile, onEdit }) => {
               profile.experience.map((exp, idx) => (
                 <div
                   key={exp.id || idx}
-                  className="mb-6 border-l-4 border-purple-500 pl-4 py-1"
+                  className="mb-6 border-l-4 border-gray-700 pl-4 py-1"
                 >
-                  <h3 className="text-xl font-semibold text-gray-900">{exp.title}</h3>
-                  <p className="text-cyan-700 text-base mb-2">
+                  <h3 className="text-xl font-semibold text-gray-700">{exp.title}</h3>
+                  <p className="text-gray-700 text-base mb-2">
                     {exp.company} {exp.years ? `| ${exp.years}` : ''}
                   </p>
                   {exp.description ? (
@@ -181,13 +183,13 @@ const ProfileView = ({ profile, onEdit }) => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No experience added yet.</p>
+              <p className="text-gray-700">No experience added yet.</p>
             )}
           </div>
 
           {/* Education Section */}
           <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-purple-300">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-700">
               Education
             </h2>
 
@@ -195,16 +197,16 @@ const ProfileView = ({ profile, onEdit }) => {
               profile.education.map((edu, idx) => (
                 <div
                   key={edu.id || idx}
-                  className="mb-6 border-l-4 border-purple-500 pl-4 py-1"
+                  className="mb-6 border-l-4 border-gray-700 pl-4 py-1"
                 >
-                  <h3 className="text-xl font-semibold text-gray-900">{edu.degree}</h3>
-                  <p className="text-cyan-700 text-base mb-2">
+                  <h3 className="text-xl font-semibold text-gray-700">{edu.degree}</h3>
+                  <p className="text-gray-700 text-base mb-2">
                     {edu.institution} {edu.years ? `| ${edu.years}` : ''}
                   </p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No education added yet.</p>
+              <p className="text-gray-700">No education added yet.</p>
             )}
           </div>
         </div>

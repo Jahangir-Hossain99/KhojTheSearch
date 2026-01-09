@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Assuming you have React Router set up
+import { useAuth } from '../context/AuthContext';
 
 const NotFound = () => {
+  const { userData } = useAuth();
   return (
     // Centered layout, taking up the full viewport height minus typical header
     <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-gray-50 p-6 pt-20">
@@ -24,7 +26,7 @@ const NotFound = () => {
 
         {/* Call to Action Button */}
         <Link 
-          to="/" // Redirects user to the main home page
+          to={`${userData?.role === 'jobseeker' ? '/profile' : userData?.role === 'employer' ? '/dashboard' : '/'}`} // Redirects user to the main home page
           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-cyan-600 hover:bg-cyan-700 transition-transform duration-300 transform hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
         >
           {/* Home Icon (using inline SVG for broad compatibility) */}

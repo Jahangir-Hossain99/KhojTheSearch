@@ -1,30 +1,27 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import axios from "axios";
+
+
 
 const Login = () => {
   const { login } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const from = location.state?.from?.pathname || "/dashboard";
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if(email === "user@example.com" && password === "123456") {
-      login("user");
-      toast.success("User Login successful!");
-      navigate("/");
-    }else if(email ==="admin@example.com" && password ==="123456"){
-      login("admin");
-      toast.success("User Login successful!");
-      navigate("/admin-panel")
-    }else{
-      toast.error("Invalid credentials. Please try again.");
+    try{
+      const response = await axios.post(`http://localhost:5000/users/login`, { email, password,role:"user" });
+      const token = response.data.token
+      const user = response.data.user;
+      await login(user,token)
+      toast.success("Login successful!");
+      }
+    catch(error){
+      console.error("Login Error:", error);
+      toast.error("Login failed. Please check your credentials.");
     }
   };
   return (

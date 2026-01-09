@@ -1,32 +1,35 @@
-// 1. Import necessary modules and initialize Express app
 const express = require('express');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 const UserRoute = require('./routes/User.route');
-const mongoose = require('mongoose');
+const CompanyRoute = require('./routes/Company.route');
+
+// 1. Initialize Express app
 const app = express();
-const { connectDB,disconnectDB } = require('./config/db');
-const PORT = process.env.PORT || 5000;
+const { connectDB, disconnectDB } = require('./config/db');
 
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false  }));
-app.use(express.json());
+
+// 2. Middleware setup
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json()); 
 app.use(cookieParser());
+app.use('/public', express.static('uploads')); // Serve static files from 'uploads' directory
 
-// 2. Middleware to parse JSON request bodies
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// 4. Define routes BEFORE starting the server
+app.use('/users',UserRoute);
+app.use('/company',CompanyRoute);
 
-// 3. Connect to MongoDB
-
-
-
+// 5. Connect to MongoDB and Start the server (using an IIFE for async/await)
 (async () => {
   await connectDB();
   const port = process.env.PORT || 5000;
+  // *** THIS IS THE ONLY app.listen() CALL ***
   const server = app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
-
   // Graceful shutdown
   process.on('SIGINT', async () => {
     console.log('\nSIGINT received. Closing server...');
@@ -44,13 +47,3 @@ app.use(express.urlencoded({ extended: true }));
     });
   });
 })();
-
-
-
-// 4. Define a simple route
-app.use("/", UserRoute);
-
-// 5. Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
