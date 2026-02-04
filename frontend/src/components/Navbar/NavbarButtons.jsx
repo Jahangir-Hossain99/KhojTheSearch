@@ -76,8 +76,18 @@ const NavbarButtons = () => {
                   <NavLink
                     to={`${userData.role === 'employer' ? '/company-profile' : '/profile'}`}
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => setDropdownOpen(false)}
                   >
                     Profile
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/appliedJobs"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Applied Jobs
                   </NavLink>
                 </li>
 
@@ -87,6 +97,7 @@ const NavbarButtons = () => {
                     <NavLink
                       to="/dashboard"
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
                     >
                       Dashboard
                     </NavLink>
@@ -95,6 +106,7 @@ const NavbarButtons = () => {
                     <NavLink
                       to="/admin-panel"
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setDropdownOpen(false)}
                     >
                       Admin Panel
                     </NavLink>

@@ -19,6 +19,7 @@ import Searchbar from "./components/Searchbar/Searchbar";
 import CompanyRegister from "./pages/Company/CompanyRegister";
 import CompanyLogin from "./pages/Company/CompanyLogin";
 import CompanyProfile from "./pages/Company/CompnayProfile";
+import UserAppliedJobs from "./pages/UserAppliedJobList";
 
 
 
@@ -49,6 +50,11 @@ function App() {
         <Route path="/profile" element={
           <PrivateRoute unallowedRoles={['employer']} >
             <Profile />
+          </PrivateRoute>
+        } />
+        <Route path="/appliedJobs" element={
+          <PrivateRoute unallowedRoles={['employer']} >
+            <UserAppliedJobs />
           </PrivateRoute>
         } />
         <Route path="/company-profile" element={

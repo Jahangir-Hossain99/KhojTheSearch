@@ -76,4 +76,18 @@ const deleteCompany = async (req, res) => {
       }
 }
 
-module.exports = {createCompany, updateCompanyProfile, deleteCompany};
+const getSpecificCompanyDetails = async (req, res) =>{
+    const companyId = req.params.companyId
+    try {
+        const companyDetails = await Company.findById(companyId)
+        if(!companyDetails){
+            return res.status(404).json({message: "Unable to find the company"})
+        }
+        return res.status(200).json({companyDetails })
+    } catch (error) {
+        console.error("Error in fetching company details")
+        return res.status(500).json({message:"Error while fetching company Details"})
+    }
+}
+
+module.exports = {createCompany, updateCompanyProfile, deleteCompany, getSpecificCompanyDetails};

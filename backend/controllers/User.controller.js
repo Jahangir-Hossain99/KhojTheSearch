@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 const Job = require('../models/Job.js');
 const Company = require('../models/Company.js')
+const Application = require('../models/Application.js');
 
 
 async function createUser(req, res) {
@@ -13,7 +14,6 @@ async function createUser(req, res) {
     const resumeUrl = resume ? { URL: `/public/resumes/${resume.filename}`, fileName: resume.filename } : null;
 
     const { email, password, fullName, phone, address, aboutme, linkedin, experience, education, skills } = req.body;
-    console.log('Received registration data:', skills);
 
     try {
         const existingUser = await user.findOne({ email });
@@ -107,29 +107,5 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const getAllJobs = async (req, res) => {
-    try {
-        const jobs = await Job.find({ status: 'Active' });
-        return res.status(200).json({ jobs });
-    } catch (error) {
-        console.error('Error in getAllJobs:', error);
-        return res.status(500).json({ message: 'Server error' });
-    }
-    
-};
 
-const getSpecificCompanyDetails = async (req, res) =>{
-    const companyId = req.params.companyId
-    try {
-        const companyDetails = await Company.findById(companyId)
-        if(!companyDetails){
-            return res.status(404).json({message: "Unable to find the company"})
-        }
-        return res.status(200).json({companyDetails})
-    } catch (error) {
-        console.error("Error in fetching company details")
-        return res.status(500).json({message:"Error while fetching company Details"})
-    }
-}
-
-module.exports = { createUser, getUserProfile,updateUserProfile, deleteUser, getAllJobs, getSpecificCompanyDetails};
+module.exports = { createUser, getUserProfile,updateUserProfile, deleteUser};

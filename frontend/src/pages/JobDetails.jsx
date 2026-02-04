@@ -1,43 +1,30 @@
-import React, { useEffect, useState } from 'react';
 import {useAuth} from '../context/AuthContext';
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useJobApplication } from '../components/Hooks/useJobApplication';
+import ApplyButton from './Jobs/ApplyButton';
 
 const JobDetails = () => {
 
-  const [companyDetails, setCompanyDetails] = useState()
+  // const [companyDetails, setCompanyDetails] = useState()
 
   const location = useLocation();
   const jobData = location.state;
   
-  useEffect(()=>{
-    const fetchCompanyDetails =  async ()=>{
-      if(!jobData?.companyId)return;
-      try {
-        const response = await axios.get(`http://localhost:5000/users/companyDetails/${jobData.companyId}`,
-          {headers:{Authorization: `Bearer ${localStorage.getItem("authToken")}`}}
-        )
-        setCompanyDetails(response.data.companyDetails)
-      } catch (error) {
-       toast.error("Failed to fetch jobs") 
-      }
-    }
-    fetchCompanyDetails()
-  },[jobData?.companyId])
-  
-  const { userRole } = useAuth();
+  const { userData } = useAuth();
+  const {companyDetails, setIsApplied, isApplied, loading} = useJobApplication(jobData, userData);  
   const navigate = useNavigate();
-
-  const handleApply = () => {
-    // In a real application, this would navigate to an application form
-    if(userRole === 'user'){
-    alert(`Applying for: ${title} at ${company}!`);
-    } else {
-      alert('Please login as a user to apply for jobs.');
-      navigate("/login", { replace: true });
-    }
+// console.log("Job Data in JobDetails:", jobData, companyDetails, isApplied, loading);
+  if (loading || !companyDetails) {
+    return <div className="pt-20 text-center">Loading Job Details...</div>;
   }
+
+  const applicationDetails = userData? {
+    jobId: jobData._id,
+    jobPosition: jobData.position,
+    companyId: jobData.companyId,
+    applicantId: userData._id,
+  } : null;
+
 
   // Helper component for section titles
   const SectionTitle = ({ children }) => (
@@ -46,7 +33,7 @@ const JobDetails = () => {
     </h3>
   );
 
-  if (!companyDetails) return <div className="pt-20 text-center">Loading Company Info...</div>;
+  
 
   return (
     <div className="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8 pt-20 font-sans">
@@ -74,12 +61,11 @@ const JobDetails = () => {
             </div>
 
             {/* Apply Button */}
-            <button
-              onClick={handleApply}
-              className="mt-4 md:mt-0 px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 transition-transform duration-300 transform hover:scale-105"
-            >
-              Apply Now
-            </button>
+            <ApplyButton 
+            applicationDetails={applicationDetails}
+            isApplied={isApplied}
+            setIsApplied={setIsApplied}
+            />
           </div>
         </div>
 

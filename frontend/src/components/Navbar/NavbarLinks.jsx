@@ -3,8 +3,9 @@ import { useAuth } from "../../context/AuthContext"; // Adjust path
 
 const Links = [
   { name: "Dashboard", url: "/dashboard", auth: true , role:["admin","employer"]},
-  { name: "Home", url: "/", auth: false },
+  { name: "Home", url: "/", auth: false ,  role:["jobseeker","admin"] },
   { name: "Profile", url: "/profile", auth:true, role:["jobseeker","admin"] },
+  { name: "Applied Jobs", url: "/appliedJobs", auth:true, role:["jobseeker","admin"] },
   { name: "Profile", url: "/company-profile", auth:true, role:["employer","admin"] },
   { name: "About", url: "/about" },
   { name: "Contact", url: "/contact" },
@@ -29,7 +30,7 @@ const NavbarLinks = ({ setIsOpen }) => {
         
         // Hide link if it's role-restricted and user doesn't match the role
         if (link.role){
-          if(!isLoggedIn || !link.role.includes(userData?.role)){
+          if(isLoggedIn && link.role && !link.role.includes(userData?.role)){
             return null
           }
         }
