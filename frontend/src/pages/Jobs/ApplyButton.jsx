@@ -23,7 +23,7 @@ export default function ApplyButton({applicationDetails, isApplied, setIsApplied
     const handleWithdraw = async () => {
         try {
             setLoading(true);
-            const response = await axios.delete(`http://localhost:5000/users/withdraw/${applicationDetails.jobId}`, {
+            const response = await axios.delete(`http://localhost:5000/jobs/withdraw/${applicationDetails.jobId}/${applicationDetails.applicantId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
             });
             alert("Application Withdrawn Successfully!");

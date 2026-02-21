@@ -125,8 +125,12 @@ const getAppliedJobsByUser = async (req, res) => {
     try {
         const applications = await Application.find({ applicantId: userId }).populate('jobId');
         const userAppliedJobs = applications.map(app => app.jobId);
-        console.log('User Applied Jobs:', userAppliedJobs);
-        return res.status(200).json({ userAppliedJobs });
+        const userAppliedJobsWithStatus = applications.map(app => ({
+            job: app.jobId,
+            applicationStatus: app.status
+        }));
+        console.log('User Applied Jobs with Status:', userAppliedJobsWithStatus);
+        return res.status(200).json({ userAppliedJobsWithStatus });
     }
     catch (error) {
         console.error('Error in getAppliedJobsByUser:', error);
@@ -134,4 +138,19 @@ const getAppliedJobsByUser = async (req, res) => {
     }
 };
 
-module.exports = {postJob, getCompanyJobs, updateJob, deleteJob, getAllJobs, applyToJob, checkApplicationStatus, getAppliedJobsByUser};
+const applicationWithdrwal = async (req, res) => {
+    const { jobId, userId } = req.params;
+    try {
+        const deletedApplication = await Application.findOneAndDelete({ jobId, applicantId: userId });
+        if (!deletedApplication) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+        return res.status(200).json({ message: 'Application withdrawn successfully' });
+    } catch (error) {
+        console.error('Error in applicationWithdrwal:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+module.exports = {postJob, getCompanyJobs, updateJob, deleteJob, getAllJobs, applyToJob, checkApplicationStatus, getAppliedJobsByUser, applicationWithdrwal};

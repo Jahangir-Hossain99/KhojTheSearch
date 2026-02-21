@@ -35,7 +35,7 @@ const Home = () => {
       <h2 className="text-3xl font-bold text-center mb-8">Latest Job Listings</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.map(job => (
-          <div key={job.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
+          <div key={job._id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
             <h3 className="text-xl font-semibold text-gray-800">{job.position}</h3>
             <p className="text-blue-600 font-medium my-2">{job.companyName}</p>
             
@@ -46,7 +46,7 @@ const Home = () => {
               </div>
               <div className="flex items-center">
                 <span className="mr-2">&#x1F4B5;</span>
-                <span>{job.salary} {job.isNegotiable && <span className="text-xs text-gray-500">(Negotiable)</span>}</span>
+                <span className='font-bold' > BDT {job.salary? `${job.salary}` : "Negotiable"}</span>
               </div>
               <div className="flex items-center">
                 <span className="mr-2">&#x1F5D3;&#xFE0F;</span>

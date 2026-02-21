@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
   const location =  useLocation();
 
@@ -85,24 +84,9 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("userData", JSON.stringify(newUserData));
     }, []); // Update user data function
   
-useEffect(() => {
-    const Jobs = async (companyId) => {
-        try {
-            const response = await axios.get(`http://localhost:5000/company/${companyId}/jobs`,
-              { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
-            );
-            setJobs(response.data.jobs);
-        }
-        catch (error) {
-            console.error("Error fetching jobs:", error);
-        }
-    };
-    if (userData && userData.role === 'employer') {
-        Jobs(userData._id);
-    }
-}, [userData]);
+
     return (
-        <AuthContext.Provider value={{ userData, isLoggedIn, login, logout, loading,updatedUserData, jobs }}>
+        <AuthContext.Provider value={{ userData, isLoggedIn, login, logout, loading,updatedUserData,  }}>
             {children}
         </AuthContext.Provider>
     );

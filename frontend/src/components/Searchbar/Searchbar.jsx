@@ -13,8 +13,7 @@ const Searchbar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-20 w-full px-4 sm:px-20">
-      <h1 className="text-2xl text-center mb-6">Welcome to KhojTheJob</h1>
+    <div className="flex flex-col items-center mt-25 w-full px-4 sm:px-20">
       
       {/* Main Search Bar */}
       <div className="w-full flex items-center mb-4">

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import JobViewModal from './JobViewModal';
 import JobUpdateModal from './JobUpdateModal';
 import ConfirmationModal from '../../components/UI/ConfirmationModal'
+import ViewApplicantListModal from '../Company/ViewApplicantListModal';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 
-const JobCard = ({ job }) => {
+const JobCard = ({ job, totalApplications, totalInvitations }) => {
 
   const navigate = useNavigate();
   
@@ -16,6 +17,7 @@ const JobCard = ({ job }) => {
   const [showUpdateJobModal, setShowUpdateJobModal] = useState(false);
   const [editData, setEditData] = useState({...job});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showApplicantsModal, setShowApplicantsModal] = useState(false);
   
   const handleJobDelete = () => {
     setShowDeleteConfirm(true);
@@ -49,15 +51,15 @@ const JobCard = ({ job }) => {
       
       <div className="mt-4 space-y-2 text-gray-600">
         <p className="flex justify-between items-center text-lg font-medium">
-          Total Responses: <span className="text-purple-600 font-semibold text-2xl">{job.responses || 0}</span>
+          Total Responses: <span className="text-gray-800 font-semibold text-2xl">{totalApplications.length || 0}</span>
         </p>
         <p className="flex justify-between items-center text-lg font-medium">
-          Invited for Interview: <span className="text-cyan-600 font-semibold text-2xl">{job.invited || 0}</span>
+          Invited for Interview: <span className="text-cyan-600 font-semibold text-2xl">{totalInvitations || 0}</span>
         </p>
       </div>
       
       <button
-        onClick={""}
+        onClick={() => setShowApplicantsModal(true)}
         className="mt-6 w-full bg-gray-800 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition-colors duration-200 shadow-md"
       >
         View Applicants
@@ -69,7 +71,24 @@ const JobCard = ({ job }) => {
         View Job Details
       </button>
     </div>
-    {showJobDetails && <JobViewModal handleJobDelete={handleJobDelete} handleJobUpdate={() => setShowUpdateJobModal(true)}  onClose={() => setShowJobDetails(false)} job={job} />}
+
+    {showApplicantsModal && (
+      <ViewApplicantListModal 
+        isOpen={showApplicantsModal}
+        onClose={() => setShowApplicantsModal(false)}
+        applicants={totalApplications}
+      />
+    )}
+
+
+    {showJobDetails &&
+    <JobViewModal
+    handleJobDelete={handleJobDelete} 
+    handleJobUpdate={() => setShowUpdateJobModal(true)}  
+    onClose={() => setShowJobDetails(false)} job={job}
+    totalApplications={totalApplications.length}
+    totalInvitations={totalInvitations}
+    />}
     {showUpdateJobModal && (<JobUpdateModal job={job} editData={editData} setEditData={setEditData} onClose={() => setShowUpdateJobModal(false)} />)}
     {showDeleteConfirm && (<ConfirmationModal
       isOpen={showDeleteConfirm}

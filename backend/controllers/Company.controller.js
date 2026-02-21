@@ -2,6 +2,7 @@ const Company = require('../models/Company.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
+const Application = require('../models/Application.js');
 
 const createCompany = async (req, res) => {
     const logo = req.files.logo ? req.files.logo[0] : null;
@@ -90,4 +91,50 @@ const getSpecificCompanyDetails = async (req, res) =>{
     }
 }
 
-module.exports = {createCompany, updateCompanyProfile, deleteCompany, getSpecificCompanyDetails};
+const applicantStatusUpdate = async (req, res) => {
+    const { applicationId, status } = req.body;
+    try {
+        const application = await Application.findById(applicationId);
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+        application.status = status;
+        await application.save();
+        return res.status(200).json({ message: 'Application status updated successfully', application });
+    } catch (error) {
+        console.error('Error in applicantStatusUpdate:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+const dashboardDetails = async (req, res) => {
+    const companyId = req.params.companyId;
+    try {
+        const company = await Company.findById(companyId);
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+        const totalJobs = await Job.countDocuments({ companyId });
+        const totalApplications = await Application.countDocuments({ companyId });
+        console.log('Dashboard Details:', { company, totalJobs, totalApplications });
+        return res.status(200).json({ company, totalJobs, totalApplications });
+    } catch (error) {
+        console.error('Error in dashboardDetails:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+const getApplicantForAJob = async (req, res) => {
+    const companyId = req.params.companyId;
+    try {
+        const applications = await Application.find({ companyId }).populate('applicantId', 'fullName email experience education skills avatarUrl resumeUrl linkedin');
+        return res.status(200).json({ applications });
+    } catch (error) {
+        console.error('Error in getApplicantForAJob:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+
+module.exports = {createCompany, updateCompanyProfile, deleteCompany, getSpecificCompanyDetails, applicantStatusUpdate, dashboardDetails, getApplicantForAJob};

@@ -5,6 +5,7 @@ const cors = require('cors');
 const UserRoute = require('./routes/User.route');
 const CompanyRoute = require('./routes/Company.route');
 const JobRoute = require('./routes/Job.route');
+const ApplicationRoute = require('./routes/Applications.route');
 
 // 1. Initialize Express app
 const app = express();
@@ -25,6 +26,7 @@ app.use('/public', express.static('uploads')); // Serve static files from 'uploa
 app.use('/users',UserRoute);
 app.use('/company',CompanyRoute);
 app.use('/jobs',JobRoute);
+app.use('/applications',ApplicationRoute);
 
 // 5. Connect to MongoDB and Start the server (using an IIFE for async/await)
 (async () => {

@@ -8,7 +8,6 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 6, select: false },
   role: { type: String, enum: ['jobseeker'], default: 'jobseeker', index: true },
   fullName: { type: String, required: true, trim: true },
-  status: { type: String, enum: ['active','suspended','unverified'], default: 'unverified', index: true },
   phone: String,
   address: String,
   aboutme: String,

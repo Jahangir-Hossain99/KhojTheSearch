@@ -5,7 +5,7 @@ const ApplicationSchema = new mongoose.Schema({
   jobPosition: { type: String, required: true, trim: true },
   applicantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
   companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true, index: true },
-  status: { type: String, enum: ['submitted','in_review','interview','offer','rejected','withdrawn'], default: 'submitted', index: true },
+  status: { type: String, enum: ['submitted','in_review','invited','offer','rejected','withdrawn'], default: 'submitted', index: true },
 }, { timestamps: true });
 
 ApplicationSchema.index({ jobId: 1, applicantId: 1 }, { unique: true });

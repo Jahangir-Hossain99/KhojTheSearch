@@ -71,9 +71,6 @@ function App() {
             <Dashboard />
           </PrivateRoute>
         } />
-        
-       
-
         <Route path="/admin-panel" element={
           <PrivateRoute unallowedRoles={['employer','jobseeker']} >
             <AdminPanel />

@@ -1,4 +1,4 @@
-const JobViewModal = ({ job, onClose, handleJobDelete, handleJobUpdate }) => (
+const JobViewModal = ({ job, onClose, handleJobDelete, handleJobUpdate, totalApplications, totalInvitations }) => (
         
         <div className="fixed inset-0 z-51 flex items-center justify-center bg-opacity-50 backdrop-blur-sm p-4" onClick={onClose}>
           
@@ -32,11 +32,11 @@ const JobViewModal = ({ job, onClose, handleJobDelete, handleJobUpdate }) => (
           <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <div className="flex flex-col items-center">
               <span className="text-lg font-medium text-gray-800">Total Responses</span>
-              <span className="text-3xl font-bold text-gray-600 mt-2">{job.responses || 0}</span>
+              <span className="text-3xl font-bold text-gray-600 mt-2">{totalApplications || 0}</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-lg font-medium text-gray-800">Invited for Interview</span>
-              <span className="text-3xl font-bold text-gray-600 mt-2">{job.invited || 0}</span>
+              <span className="text-3xl font-bold text-gray-600 mt-2">{totalInvitations || 0}</span>
             </div>
           </div>
         </div>

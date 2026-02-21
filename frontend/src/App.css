@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@import "tailwindcss/forms";
+@import "tailwindcss/typography";
+@import "tailwindcss/aspect-ratio";
+@import "tailwindcss/container-queries";
+@import "@tailwindcss/line-clamp";
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Company = require('../controllers/Company.controller');
 const JobController = require('../controllers/Job.controller');
+const User = require('../controllers/User.controller');
 const upload = require('../middleware/Upload');
 const auth = require('../middleware/Authentication');
 
@@ -9,6 +10,8 @@ router.post('/register',upload.fields([{ name: 'logo', maxCount: 1 }]),Company.c
 router.post('/login',auth.companyLoginAuthenticate);
 router.put('/update',upload.fields([{ name: 'logo', maxCount: 1 }]),auth.authenticateToken,Company.updateCompanyProfile);
 router.delete('/:companyId', auth.authenticateToken, Company.deleteCompany);
+router.get('/:companyId', Company.dashboardDetails);
+router.get('/profile/:userId', auth.authenticateToken, User.getUserProfile);
 
 // Job routes
 router.post('/post-a-job', auth.authenticateToken, JobController.postJob);
